@@ -18,18 +18,18 @@ public class EmployeeEventService {
         this.eventProducer = eventProducer;
     }
 
-    public void publishEmployeeCreated(Employee employee) {
-        EmployeeCreatedEvent event = new EmployeeCreatedEvent(
-            employee.getDocument(),
-            employee.getFirstname(),
-            employee.getLastname(),
-            employee.getEmail(),
-            employee.getPhone(),
-            employee.isStatus(),
-            LocalDateTime.now() // Explicitamente enviamos la fecha
-        );
-        eventProducer.sendEvent("employee-created", event);
-    }
+public void publishEmployeeCreated(Employee employee) {
+    EmployeeCreatedEvent event = new EmployeeCreatedEvent(
+        employee.getDocument(),
+        employee.getFirstname(),
+        employee.getLastname(),
+        employee.getEmail(),
+        employee.getPhone(),
+        employee.isStatus(),
+        LocalDateTime.now()
+    );
+    eventProducer.sendEvent("employee-created", event);
+}
 
 
     public void publishEmployeeUpdated(Employee employee) {

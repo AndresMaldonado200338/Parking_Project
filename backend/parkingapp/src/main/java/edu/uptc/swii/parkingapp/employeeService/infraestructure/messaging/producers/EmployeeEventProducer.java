@@ -27,7 +27,7 @@ public class EmployeeEventProducer {
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, TOPIC)
                 .setHeader(KafkaHeaders.KEY, eventType)
-                .setHeader("event-type", eventType)
+                .setHeader("event-type", event.getClass().getSimpleName())
                 .build();
             
             kafkaTemplate.send(message)

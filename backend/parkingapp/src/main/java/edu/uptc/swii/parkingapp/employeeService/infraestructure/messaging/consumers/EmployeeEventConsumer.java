@@ -1,37 +1,34 @@
 package edu.uptc.swii.parkingapp.employeeService.infraestructure.messaging.consumers;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.uptc.swii.parkingapp.employeeService.domain.events.EmployeeCreatedEvent;
 import edu.uptc.swii.parkingapp.employeeService.domain.events.EmployeeDisabledEvent;
 import edu.uptc.swii.parkingapp.employeeService.domain.events.EmployeeUpdatedEvent;
 import edu.uptc.swii.parkingapp.employeeService.domain.models.Employee;
-import edu.uptc.swii.parkingapp.employeeService.domain.ports.EmployeeCommandPort;
-import edu.uptc.swii.parkingapp.employeeService.domain.ports.EmployeeQueryPort;
+import edu.uptc.swii.parkingapp.employeeService.infraestructure.persistence.mongodb.MongoEmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class EmployeeEventConsumer {
-    
-    private final EmployeeQueryPort queryPort;
-    private final EmployeeCommandPort commandPort;
-    private final ObjectMapper objectMapper;
 
-    public EmployeeEventConsumer(EmployeeQueryPort queryPort, 
-                              EmployeeCommandPort commandPort,
-                              ObjectMapper objectMapper) {
-        this.queryPort = queryPort;
-        this.commandPort = commandPort;
-        this.objectMapper = objectMapper;
+    private final MongoEmployeeRepository mongoRepository;
+
+    public EmployeeEventConsumer(MongoEmployeeRepository mongoRepository) {
+        this.mongoRepository = mongoRepository;
     }
 
-    @KafkaListener(topics = "employee-events", groupId = "employee-group")
-    public void consumeEmployeeEvent(@Payload Object event) {
+    @KafkaListener(topics = "employee-events", groupId = "employee-group",
+                  containerFactory = "kafkaListenerContainerFactory")
+    @Transactional
+    public void consumeEmployeeEvent(ConsumerRecord<String, Object> record) {
         try {
-            // Convertir el evento según su tipo
+            Object event = record.value();
+            
             if (event instanceof EmployeeCreatedEvent) {
                 handleEmployeeCreated((EmployeeCreatedEvent) event);
             } else if (event instanceof EmployeeUpdatedEvent) {
@@ -39,29 +36,30 @@ public class EmployeeEventConsumer {
             } else if (event instanceof EmployeeDisabledEvent) {
                 handleEmployeeDisabled((EmployeeDisabledEvent) event);
             } else {
-                throw new IllegalArgumentException("Unknown event type: " + event.getClass().getName());
+                log.warn("Evento desconocido recibido: {}", event.getClass().getName());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error processing event", e);
+            log.error("Error procesando evento: {}", e.getMessage());
+            throw new RuntimeException("Error procesando evento", e);
         }
     }
 
     private void handleEmployeeCreated(EmployeeCreatedEvent event) {
-        if (!queryPort.findByDocument(event.getDocument()).isPresent()) {
-            Employee employee = new Employee(
-                event.getDocument(),
-                event.getFirstname(),
-                event.getLastname(),
-                event.getEmail(),
-                event.getPhone(),
-                event.isStatus()
-            );
-            commandPort.saveEmployee(employee);
-        }
+        log.info("Procesando EmployeeCreatedEvent: {}", event.getDocument());
+        Employee employee = new Employee(
+            event.getDocument(),
+            event.getFirstname(),
+            event.getLastname(),
+            event.getEmail(),
+            event.getPhone(),
+            event.isStatus()
+        );
+        mongoRepository.save(employee);
     }
 
     private void handleEmployeeUpdated(EmployeeUpdatedEvent event) {
-        queryPort.findByDocument(event.getDocument())
+        log.info("Procesando EmployeeUpdatedEvent: {}", event.getDocument());
+        mongoRepository.findByDocument(event.getDocument())
             .ifPresent(employee -> {
                 employee.update(
                     event.getFirstname(),
@@ -69,15 +67,16 @@ public class EmployeeEventConsumer {
                     event.getEmail(),
                     event.getPhone()
                 );
-                commandPort.updateEmployee(employee);
+                mongoRepository.save(employee);
             });
     }
 
     private void handleEmployeeDisabled(EmployeeDisabledEvent event) {
-        queryPort.findByDocument(event.getDocument())
+        log.info("Procesando EmployeeDisabledEvent: {}", event.getDocument());
+        mongoRepository.findByDocument(event.getDocument())
             .ifPresent(employee -> {
                 employee.disable();
-                commandPort.disableEmployee(employee.getDocument());
+                mongoRepository.save(employee);
             });
     }
 }
