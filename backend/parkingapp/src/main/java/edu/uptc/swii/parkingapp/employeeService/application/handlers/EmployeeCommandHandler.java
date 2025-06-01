@@ -1,5 +1,7 @@
 package edu.uptc.swii.parkingapp.employeeService.application.handlers;
 
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,22 +47,28 @@ public class EmployeeCommandHandler {
         return toResponseDTO(saved);
     }
 
-    public EmployeeResponseDTO handleUpdateEmployee(UpdateEmployeeCommand command) {
-        Employee employee = commandPort.findById(command.getDocument())
-            .orElseThrow(() -> new RuntimeException("Employee not found"));
-        
-        employee.update(
-            command.getFirstname(),
-            command.getLastname(),
-            command.getEmail(),
-            command.getPhone()
-        );
-        
-        domainService.validateEmployee(employee);
-        Employee updated = commandPort.updateEmployee(employee);
-        eventService.publishEmployeeUpdated(updated);
-        return toResponseDTO(updated);
-    }
+public EmployeeResponseDTO handleUpdateEmployee(UpdateEmployeeCommand command) {
+    // 1. Buscar empleado en MySQL
+    Employee employee = commandPort.findById(command.getDocument())
+        .orElseThrow(() -> new RuntimeException("Employee not found"));
+    
+    // 2. Actualizar datos
+    employee.update(
+        command.getFirstname(),
+        command.getLastname(),
+        command.getEmail(),
+        command.getPhone()
+    );
+    
+    // 3. Validar y guardar en MySQL
+    domainService.validateEmployee(employee);
+    Employee updated = commandPort.updateEmployee(employee);
+    
+    // 4. Publicar evento de actualización
+    eventService.publishEmployeeUpdated(updated);
+    
+    return toResponseDTO(updated);
+}
 
     public StatusDTO handleDisableEmployee(DisableEmployeeCommand command) {
         Employee employee = commandPort.findById(command.getDocument())

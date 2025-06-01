@@ -20,11 +20,9 @@ public class ErrorResponseDTO {
         private String message;
         private String rejectedValue;
         public void setObjectName(String objectName) {
-            // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'setObjectName'");
         }
         public void setCode(String code) {
-            // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'setCode'");
         }
     }

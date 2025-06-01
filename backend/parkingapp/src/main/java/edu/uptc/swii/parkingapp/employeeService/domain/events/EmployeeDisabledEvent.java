@@ -1,14 +1,19 @@
 package edu.uptc.swii.parkingapp.employeeService.domain.events;
 
-import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonTypeName("EmployeeDisabledEvent")
 public class EmployeeDisabledEvent implements DomainEvent {
-    private final String document;
-    private final LocalDateTime occurredOn = LocalDateTime.now();
+    private String document;
+    private LocalDateTime occurredOn;
 
     @Override
     public String getType() {

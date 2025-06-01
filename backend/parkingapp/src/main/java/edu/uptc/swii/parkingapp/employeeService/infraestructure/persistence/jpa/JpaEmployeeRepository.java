@@ -19,16 +19,13 @@ public class JpaEmployeeRepository implements EmployeeCommandPort {
 
     @Override
     public Employee saveEmployee(Employee employee) {
-        // Verificar si el empleado ya existe para determinar si es creación o actualización
         Optional<EmployeeEntity> existingEntity = jpaRepository.findById(employee.getDocument());
         
         EmployeeEntity entity;
         if (existingEntity.isPresent()) {
-            // Actualización
             entity = existingEntity.get();
             updateEntityFromDomain(entity, employee);
         } else {
-            // Creación
             entity = toEntity(employee);
         }
         
@@ -56,7 +53,7 @@ public class JpaEmployeeRepository implements EmployeeCommandPort {
 
     @Override
     public Optional<Employee> findById(String document) {
-        return jpaRepository.findByDocument(document)  // Cambiado a findByDocument
+        return jpaRepository.findByDocument(document)  
             .map(this::toDomain);
     }
 
@@ -83,7 +80,6 @@ public class JpaEmployeeRepository implements EmployeeCommandPort {
     }
 
     private void updateEntityFromDomain(EmployeeEntity entity, Employee employee) {
-        // No actualizamos el documento ya que es el ID
         entity.setFirstname(employee.getFirstname());
         entity.setLastname(employee.getLastname());
         entity.setEmail(employee.getEmail());

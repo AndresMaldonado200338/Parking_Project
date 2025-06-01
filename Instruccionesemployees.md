@@ -9,16 +9,19 @@ localhost:8081/employee/createemployee
 }
 
 Actualizar
+PUT
 localhost:8081/employee/updateemployee/123456789
 {
-  "firstname": "Juan Carlos",
-  "lastname": "Pérez Gómez",
-  "email": "juan.c.perez@example.com",
-  "phone": "+573001234568"
+    "document": "123456789",
+    "firstname": "pepito",
+    "lastname": "perez",
+    "email": "nuevo.email@example.com",
+    "phone": "+573001234569"
 }
 
 
 Listar todos
+GET
 localhost:8081/employee/findallemployees
 [
   {
@@ -40,6 +43,7 @@ localhost:8081/employee/findallemployees
 ]
 
 Desactivar Empleado
+PATCH
 localhost:8081/employee/disableemployee/{document}
 
 {

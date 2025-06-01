@@ -27,6 +27,9 @@ public class EmployeeEventConsumer {
     @Transactional
     public void consumeEmployeeEvent(ConsumerRecord<String, Object> record) {
         try {
+            log.debug("Evento recibido - Key: {}, Topic: {}, Partition: {}", 
+                     record.key(), record.topic(), record.partition());
+            
             Object event = record.value();
             
             if (event instanceof EmployeeCreatedEvent) {
@@ -36,47 +39,82 @@ public class EmployeeEventConsumer {
             } else if (event instanceof EmployeeDisabledEvent) {
                 handleEmployeeDisabled((EmployeeDisabledEvent) event);
             } else {
-                log.warn("Evento desconocido recibido: {}", event.getClass().getName());
+                log.warn("Evento desconocido recibido. Tipo: {}", event.getClass().getName());
             }
         } catch (Exception e) {
-            log.error("Error procesando evento: {}", e.getMessage());
-            throw new RuntimeException("Error procesando evento", e);
+            log.error("Error crítico procesando evento. Offset: {}, Mensaje: {}", 
+                     record.offset(), e.getMessage(), e);
+            // No relanzamos la excepción para evitar el reintento infinito
+            // Se puede implementar DLQ aquí si es necesario
         }
     }
 
     private void handleEmployeeCreated(EmployeeCreatedEvent event) {
-        log.info("Procesando EmployeeCreatedEvent: {}", event.getDocument());
-        Employee employee = new Employee(
-            event.getDocument(),
-            event.getFirstname(),
-            event.getLastname(),
-            event.getEmail(),
-            event.getPhone(),
-            event.isStatus()
-        );
-        mongoRepository.save(employee);
+        try {
+            log.info("Procesando creación de empleado en MongoDB: {}", event.getDocument());
+            
+            if (mongoRepository.findByDocument(event.getDocument()).isPresent()) {
+                log.warn("Empleado ya existe en MongoDB: {}", event.getDocument());
+                return;
+            }
+
+            Employee employee = new Employee(
+                event.getDocument(),
+                event.getFirstname(),
+                event.getLastname(),
+                event.getEmail(),
+                event.getPhone(),
+                event.isStatus()
+            );
+            
+            mongoRepository.save(employee);
+            log.info("Empleado creado exitosamente en MongoDB: {}", event.getDocument());
+        } catch (Exception e) {
+            log.error("Error al crear empleado en MongoDB: {}", event.getDocument(), e);
+            throw new RuntimeException("Error al crear empleado en MongoDB", e);
+        }
     }
 
     private void handleEmployeeUpdated(EmployeeUpdatedEvent event) {
-        log.info("Procesando EmployeeUpdatedEvent: {}", event.getDocument());
-        mongoRepository.findByDocument(event.getDocument())
-            .ifPresent(employee -> {
-                employee.update(
-                    event.getFirstname(),
-                    event.getLastname(),
-                    event.getEmail(),
-                    event.getPhone()
+        try {
+            log.info("Procesando actualización de empleado en MongoDB: {}", event.getDocument());
+            
+            mongoRepository.findByDocument(event.getDocument())
+                .ifPresentOrElse(
+                    employee -> {
+                        employee.update(
+                            event.getFirstname(),
+                            event.getLastname(),
+                            event.getEmail(),
+                            event.getPhone()
+                        );
+                        mongoRepository.save(employee);
+                        log.info("Empleado actualizado en MongoDB: {}", event.getDocument());
+                    },
+                    () -> log.warn("Empleado no encontrado en MongoDB para actualización: {}", event.getDocument())
                 );
-                mongoRepository.save(employee);
-            });
+        } catch (Exception e) {
+            log.error("Error al actualizar empleado en MongoDB: {}", event.getDocument(), e);
+            throw new RuntimeException("Error al actualizar empleado en MongoDB", e);
+        }
     }
 
     private void handleEmployeeDisabled(EmployeeDisabledEvent event) {
-        log.info("Procesando EmployeeDisabledEvent: {}", event.getDocument());
-        mongoRepository.findByDocument(event.getDocument())
-            .ifPresent(employee -> {
-                employee.disable();
-                mongoRepository.save(employee);
-            });
+        try {
+            log.info("Procesando deshabilitación de empleado en MongoDB: {}", event.getDocument());
+            
+            mongoRepository.findByDocument(event.getDocument())
+                .ifPresentOrElse(
+                    employee -> {
+                        employee.disable();
+                        mongoRepository.save(employee);
+                        log.info("Empleado deshabilitado en MongoDB: {}", event.getDocument());
+                    },
+                    () -> log.warn("Empleado no encontrado en MongoDB para deshabilitación: {}", event.getDocument())
+                );
+        } catch (Exception e) {
+            log.error("Error al deshabilitar empleado en MongoDB: {}", event.getDocument(), e);
+            throw new RuntimeException("Error al deshabilitar empleado en MongoDB", e);
+        }
     }
 }

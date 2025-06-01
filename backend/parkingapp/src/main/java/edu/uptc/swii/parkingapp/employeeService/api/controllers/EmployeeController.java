@@ -40,14 +40,14 @@ public class EmployeeController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateemployee/{document}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(
-            @PathVariable String document,
-            @Valid @RequestBody EmployeeRequestDTO request) {
-        UpdateEmployeeCommand command = mapper.toUpdateCommand(document, request);
-        EmployeeResponseDTO response = commandHandler.handleUpdateEmployee(command);
-        return ResponseEntity.ok(response);
-    }
+@PutMapping("/updateemployee/{document}")
+public ResponseEntity<EmployeeResponseDTO> updateEmployee(
+        @PathVariable String document,
+        @Valid @RequestBody EmployeeRequestDTO request) {
+    UpdateEmployeeCommand command = mapper.toUpdateCommand(document, request);
+    EmployeeResponseDTO response = commandHandler.handleUpdateEmployee(command);
+    return ResponseEntity.ok(response);
+}
 
     @GetMapping("/findallemployees")
     public ResponseEntity<List<EmployeeResponseDTO>> findAllEmployees() {
@@ -60,4 +60,5 @@ public class EmployeeController {
         StatusDTO response = commandHandler.handleDisableEmployee(new DisableEmployeeCommand(document));
         return ResponseEntity.ok(response);
     }
+    
 }
