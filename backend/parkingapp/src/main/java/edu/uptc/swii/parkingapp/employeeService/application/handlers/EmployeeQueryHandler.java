@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.uptc.swii.parkingapp.employeeService.api.dtos.EmployeeResponseDTO;
 import edu.uptc.swii.parkingapp.employeeService.application.queries.FindAllEmployeesQuery;
+import edu.uptc.swii.parkingapp.employeeService.application.queries.FindByDocumentQuery;
 import edu.uptc.swii.parkingapp.employeeService.domain.models.Employee;
 import edu.uptc.swii.parkingapp.employeeService.domain.ports.EmployeeQueryPort;
 
@@ -26,6 +27,12 @@ public class EmployeeQueryHandler {
         return employees.stream()
             .map(this::toResponseDTO)
             .collect(Collectors.toList());
+    }
+
+    public EmployeeResponseDTO handle(FindByDocumentQuery query) {
+       return queryPort.findByDocument(query.getDocument())
+            .map(this::toResponseDTO)
+            .orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 
     private EmployeeResponseDTO toResponseDTO(Employee employee) {
