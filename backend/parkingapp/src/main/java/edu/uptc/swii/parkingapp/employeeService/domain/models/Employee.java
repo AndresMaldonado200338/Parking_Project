@@ -1,13 +1,14 @@
 package edu.uptc.swii.parkingapp.employeeService.domain.models;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import lombok.Getter;
-
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Getter;
+
 @Getter
-@Document(collection = "employees")
+@Document(collection = "Employee")
 public class Employee {
     @Id
     private final String document;

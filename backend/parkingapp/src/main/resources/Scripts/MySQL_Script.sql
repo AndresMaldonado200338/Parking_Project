@@ -28,7 +28,10 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS Access (
+        id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY, -- Added this ID column
         employeeID VARCHAR(50),
         accessdatetime DATETIME,
+        event_type VARCHAR(10) NOT NULL DEFAULT 'ENTRADA' 
+            CHECK (event_type IN ('ENTRADA', 'SALIDA')),
         FOREIGN KEY (employeeID) REFERENCES Employee (document)
     );
