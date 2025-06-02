@@ -1,11 +1,12 @@
 package edu.uptc.swii.parkingapp.employeeService.infraestructure.persistence.mongodb.documents;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
 @Data
-@Document(collection = "employees")
+@Document(collection = "Employee")
 public class EmployeeDocument {
     @Id
     private String document;

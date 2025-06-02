@@ -5,4 +5,4 @@ use GestionEmpleadosDB;
 db.createCollection("Access");
 
 // Crear la colección Employee (vacía)
-db.createCollection("employees");
+db.createCollection("Employee");

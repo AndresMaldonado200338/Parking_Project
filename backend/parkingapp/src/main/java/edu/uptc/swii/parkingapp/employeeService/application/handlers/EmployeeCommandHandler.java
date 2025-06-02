@@ -1,7 +1,5 @@
 package edu.uptc.swii.parkingapp.employeeService.application.handlers;
 
-import java.util.Objects;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +16,14 @@ import edu.uptc.swii.parkingapp.employeeService.domain.services.EmployeeDomainSe
 @Service
 @Transactional
 public class EmployeeCommandHandler {
-    
+
     private final EmployeeCommandPort commandPort;
     private final EmployeeDomainService domainService;
     private final EmployeeEventService eventService;
 
     public EmployeeCommandHandler(EmployeeCommandPort commandPort,
-                                EmployeeDomainService domainService,
-                                EmployeeEventService eventService) {
+            EmployeeDomainService domainService,
+            EmployeeEventService eventService) {
         this.commandPort = commandPort;
         this.domainService = domainService;
         this.eventService = eventService;
@@ -33,47 +31,45 @@ public class EmployeeCommandHandler {
 
     public EmployeeResponseDTO handleCreateEmployee(CreateEmployeeCommand command) {
         Employee employee = new Employee(
-            command.getDocument(),
-            command.getFirstname(),
-            command.getLastname(),
-            command.getEmail(),
-            command.getPhone(),
-            true
-        );
-        
+                command.getDocument(),
+                command.getFirstname(),
+                command.getLastname(),
+                command.getEmail(),
+                command.getPhone(),
+                true);
+
         domainService.validateEmployee(employee);
         Employee saved = commandPort.saveEmployee(employee);
         eventService.publishEmployeeCreated(saved);
         return toResponseDTO(saved);
     }
 
-public EmployeeResponseDTO handleUpdateEmployee(UpdateEmployeeCommand command) {
-    // 1. Buscar empleado en MySQL
-    Employee employee = commandPort.findById(command.getDocument())
-        .orElseThrow(() -> new RuntimeException("Employee not found"));
-    
-    // 2. Actualizar datos
-    employee.update(
-        command.getFirstname(),
-        command.getLastname(),
-        command.getEmail(),
-        command.getPhone()
-    );
-    
-    // 3. Validar y guardar en MySQL
-    domainService.validateEmployee(employee);
-    Employee updated = commandPort.updateEmployee(employee);
-    
-    // 4. Publicar evento de actualización
-    eventService.publishEmployeeUpdated(updated);
-    
-    return toResponseDTO(updated);
-}
+    public EmployeeResponseDTO handleUpdateEmployee(UpdateEmployeeCommand command) {
+        // 1. Buscar empleado en MySQL
+        Employee employee = commandPort.findById(command.getDocument())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        // 2. Actualizar datos
+        employee.update(
+                command.getFirstname(),
+                command.getLastname(),
+                command.getEmail(),
+                command.getPhone());
+
+        // 3. Validar y guardar en MySQL
+        domainService.validateEmployee(employee);
+        Employee updated = commandPort.updateEmployee(employee);
+
+        // 4. Publicar evento de actualización
+        eventService.publishEmployeeUpdated(updated);
+
+        return toResponseDTO(updated);
+    }
 
     public StatusDTO handleDisableEmployee(DisableEmployeeCommand command) {
         Employee employee = commandPort.findById(command.getDocument())
-            .orElseThrow(() -> new RuntimeException("Employee not found"));
-        
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
         employee.disable();
         Employee disabled = commandPort.disableEmployee(employee.getDocument());
         eventService.publishEmployeeDisabled(disabled);
@@ -82,12 +78,11 @@ public EmployeeResponseDTO handleUpdateEmployee(UpdateEmployeeCommand command) {
 
     private EmployeeResponseDTO toResponseDTO(Employee employee) {
         return new EmployeeResponseDTO(
-            employee.getDocument(),
-            employee.getFirstname(),
-            employee.getLastname(),
-            employee.getEmail(),
-            employee.getPhone(),
-            employee.isStatus()
-        );
+                employee.getDocument(),
+                employee.getFirstname(),
+                employee.getLastname(),
+                employee.getEmail(),
+                employee.getPhone(),
+                employee.isStatus());
     }
 }
