@@ -1,6 +1,6 @@
 # Instrucciones para Endpoints del Servicio de Control de Acceso (AccessControlService)
 
-Este documento describe los endpoints disponibles para el microservicio de control de acceso. Asumiendo que el servicio corre en `localhost:8081` (o el puerto configurado para la aplicación principal).
+Este documento describe los endpoints disponibles para el microservicio de control de acceso. Asumiendo que el servicio corre en `localhost:8080` (o el puerto configurado para la aplicación principal).
 
 ---
 
@@ -167,6 +167,6 @@ Obtiene los registros de acceso y la duración total para un empleado específic
 
 ## Consideraciones Adicionales
 
-- **Puerto del Servidor**: Asegúrate de que el puerto configurado es correcto (`localhost:8081`).
+- **Puerto del Servidor**: Asegúrate de que el puerto configurado es correcto (`localhost:8080`).
 - **Nombres de Empleados en Reportes**: Actualmente se muestra como `"Employee: {employeeId}"`. Para nombres reales, se requiere integración con `EmployeeService`.
 - **Formato de Fechas y Horas**: Usa el formato ISO para `LocalDateTime` y "YYYY-MM-DD" para fechas en parámetros de consulta.

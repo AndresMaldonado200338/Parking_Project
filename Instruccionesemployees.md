@@ -1,5 +1,5 @@
 Post
-localhost:8081/employee/createemployee
+localhost:8080/employee/createemployee
 {
   "document": "123456789",
   "firstname": "Juan",
@@ -10,7 +10,7 @@ localhost:8081/employee/createemployee
 
 Actualizar
 PUT
-localhost:8081/employee/updateemployee/123456789
+localhost:8080/employee/updateemployee/123456789
 {
     "document": "123456789",
     "firstname": "pepito",
@@ -22,7 +22,7 @@ localhost:8081/employee/updateemployee/123456789
 
 Listar todos
 GET
-localhost:8081/employee/findallemployees
+localhost:8080/employee/findallemployees
 [
   {
     "document": "123456789",
@@ -44,7 +44,7 @@ localhost:8081/employee/findallemployees
 
 Desactivar Empleado
 PATCH
-localhost:8081/employee/disableemployee/{document}
+localhost:8080/employee/disableemployee/{document}
 
 {
   "status": false,
