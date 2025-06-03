@@ -1,0 +1,11 @@
+-- LoginDB
+CREATE DATABASE IF NOT EXISTS LoginDB;
+
+USE LoginDB;
+
+CREATE TABLE
+    login (
+        id SERIAL AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        userID BIGINT NOT NULL,
+        password VARCHAR(255) NOT NULL
+    );
