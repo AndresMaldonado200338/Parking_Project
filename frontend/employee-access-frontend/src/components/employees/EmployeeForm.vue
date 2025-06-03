@@ -61,71 +61,79 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import { employeeApi } from '../../services/api'
-import { toast } from 'vue-toastification'
+// 1. Remueve 'defineEmits' de aquí si no se usa en otro lado, o asegúrate de que es para <script setup>
+//    En este caso, no lo necesitas para la función setup tradicional.
+import { ref, watch } from 'vue' //
+import { employeeApi } from '../../services/api' //
+import { toast } from 'vue-toastification' //
 
 export default {
-  props: {
-    employee: {
-      type: Object,
-      default: null
+  props: { //
+    employee: { //
+      type: Object, //
+      default: null //
     }
   },
-  setup(props) {
-    const formData = ref({
-      document: '',
-      firstname: '',
-      lastname: '',
-      email: '',
-      phone: ''
+  // 2. Declara los eventos que el componente emite usando la opción 'emits'
+  emits: ['refresh'],
+  
+  // 3. Modifica la firma de la función setup para recibir el contexto y desestructura 'emit'
+  setup(props, { emit }) { //
+    const formData = ref({ //
+      document: '', //
+      firstname: '', //
+      lastname: '', //
+      email: '', //
+      phone: '' //
     })
 
-    const isEditing = ref(false)
+    const isEditing = ref(false) //
 
-    watch(() => props.employee, (newVal) => {
-      if (newVal) {
-        isEditing.value = true
-        formData.value = { ...newVal }
-      } else {
-        resetForm()
+    watch(() => props.employee, (newVal) => { //
+      if (newVal) { //
+        isEditing.value = true //
+        formData.value = { ...newVal } //
+      } else { //
+        resetForm() //
       }
-    }, { immediate: true })
+    }, { immediate: true }) //
 
-    const resetForm = () => {
-      formData.value = {
-        document: '',
-        firstname: '',
-        lastname: '',
-        email: '',
-        phone: ''
+    const resetForm = () => { //
+      formData.value = { //
+        document: '', //
+        firstname: '', //
+        lastname: '', //
+        email: '', //
+        phone: '' //
       }
-      isEditing.value = false
+      isEditing.value = false //
     }
 
-    const handleSubmit = async () => {
-      try {
-        if (isEditing.value) {
-          await employeeApi.put(`/updateemployee/${formData.value.document}`, formData.value)
-          toast.success('Empleado actualizado correctamente')
-        } else {
-          await employeeApi.post('/createemployee', formData.value)
-          toast.success('Empleado creado correctamente')
+    const handleSubmit = async () => { //
+      try { //
+        if (isEditing.value) { //
+          await employeeApi.put(`/updateemployee/${formData.value.document}`, formData.value) //
+          toast.success('Empleado actualizado correctamente') //
+        } else { //
+          await employeeApi.post('/createemployee', formData.value) //
+          toast.success('Empleado creado correctamente') //
         }
-        resetForm()
-        emit('refresh')
-      } catch (error) {
-        toast.error('Error al guardar el empleado')
-        console.error('Error:', error)
+        resetForm() //
+        // 4. Ahora 'emit' está correctamente definido y se puede usar.
+        emit('refresh') //
+      } catch (error) { //
+        toast.error('Error al guardar el empleado') //
+        console.error('Error:', error) //
       }
     }
 
-    return { formData, isEditing, handleSubmit, resetForm }
+    return { formData, isEditing, handleSubmit, resetForm } //
   }
 }
 </script>
 
 <style scoped>
+/* Tus estilos permanecen iguales */
 .employee-form {
   background: white;
   padding: 1.5rem;

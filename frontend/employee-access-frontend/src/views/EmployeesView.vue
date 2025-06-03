@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import EmployeeList from '@/components/employee/EmployeeList.vue'
+import EmployeeList from '@/components/employees/EmployeeList.vue'
 </script>
 
 <style scoped lang="scss">
