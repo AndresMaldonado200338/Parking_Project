@@ -12,7 +12,7 @@ public class AccessControlMonitoringConfig  {
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> accessControlMetricsCommonTags() {
         return registry -> registry.config()
-            .commonTags("application", "access-control-service")
+            .commonTags("application", "employee-service")
             .commonTags("module", "access-management");
     }
 }

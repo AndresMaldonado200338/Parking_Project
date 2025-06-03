@@ -9,7 +9,7 @@ public class EmployeeByDatesQuery {
 
     public EmployeeByDatesQuery() {
         this.employeeId = "";
-        this.startDate = LocalDate.now().minusDays(7); // Últimos 7 días por defecto
+        this.startDate = LocalDate.now().minusDays(7); 
         this.endDate = LocalDate.now();
     }
 
