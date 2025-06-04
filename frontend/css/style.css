@@ -1,0 +1,416 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc; /* Gris muy claro, casi blanco */
+    color: #2c3e50; /* Gris oscuro para texto principal */
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    overflow: hidden;
+    padding: 30px; /* Un poco más de padding */
+    background-color: #ffffff;
+    border-radius: 10px; /* Bordes más redondeados */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* Sombra un poco más pronunciada */
+}
+
+/* Header */
+header {
+    background: #4A90E2; /* Azul sereno y moderno */
+    color: #ffffff;
+    padding: 30px 0; /* Más padding vertical */
+    text-align: center;
+    margin-bottom: 35px;
+    /* Eliminamos el borde inferior para un look más limpio, el color ya da separación */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em; /* Ligeramente más grande */
+    font-weight: 600; /* Un poco más de peso */
+}
+
+header button#logoutButton {
+    position: absolute;
+    top: 30px;
+    right: 35px;
+    padding: 10px 20px;
+    background: #ffffff; /* Botón blanco sobre fondo azul */
+    color: #4A90E2; /* Texto del color primario */
+    border: 1px solid #4A90E2; /* Borde sutil del color primario */
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header button#logoutButton:hover {
+    background-color: #e8f0fe; /* Azul muy claro al pasar el mouse */
+    color: #3a7bc8;
+}
+
+/* Typography */
+h1, h2, h3 {
+    color: #4A90E2; /* Color primario para todos los encabezados */
+    margin-top: 0;
+}
+
+h2 {
+    border-bottom: 2px solid #e8f0fe; /* Borde inferior con un azul muy pálido */
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.4em;
+    color: #34495e; /* Un gris azulado para subsecciones */
+    margin-bottom: 15px;
+}
+
+/* Forms */
+form div {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600; /* Un poco más de peso */
+    color: #34495e; /* Gris azulado para etiquetas */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+input[type="datetime-local"] {
+    width: calc(100% - 26px);
+    padding: 13px; /* Un poco más de padding */
+    border: 1px solid #dde1e6; /* Borde gris claro */
+    border-radius: 6px; /* Bordes ligeramente más redondeados */
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fdfdff; /* Fondo del input ligeramente diferente al del contenedor */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus {
+    border-color: #4A90E2; /* Color primario al enfocar */
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Sombra sutil al enfocar */
+    outline: none;
+}
+
+/* Buttons */
+button {
+    color: white;
+    padding: 12px 22px; /* Padding ajustado */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 1em;
+    font-weight: 500; /* Peso medio */
+    transition: background-color 0.2s ease-out, transform 0.15s ease-out;
+    letter-spacing: 0.5px; /* Espaciado ligero entre letras */
+}
+
+button:hover {
+    /* La opacidad general se puede manejar por color específico si es necesario */
+    transform: translateY(-2px); /* Efecto de elevación más notorio */
+}
+
+button:active {
+    transform: translateY(-1px);
+}
+
+/* Primary action buttons (Save, Load, Check-In) */
+button[type="submit"],
+#saveEmployeeButton,
+#loadEmployeesButton,
+#checkInButton {
+    background-color: #4A90E2; /* Azul primario */
+}
+button[type="submit"]:hover,
+#saveEmployeeButton:hover,
+#loadEmployeesButton:hover,
+#checkInButton:hover {
+    background-color: #3a7bc8; /* Azul primario más oscuro */
+}
+
+/* Secondary/Alternative action buttons (Check-Out) */
+#checkOutButton {
+    background-color: #F5A623; /* Ámbar/Naranja suave */
+    color: #ffffff; /* Texto blanco para buen contraste con naranja */
+}
+#checkOutButton:hover {
+    background-color: #d8901f; /* Naranja más oscuro */
+}
+
+/* Clear / Info button (Clear Form) */
+#clearEmployeeFormButton {
+    background-color: #7f8c8d; /* Gris neutro */
+}
+#clearEmployeeFormButton:hover {
+    background-color: #6c7a7b;
+}
+
+/* Table Action Buttons */
+.table-button-edit {
+    background-color: #48C9B0; /* Turquesa/Verde azulado */
+    padding: 8px 15px; /* Más pequeños para tablas */
+    font-size: 0.9em;
+}
+.table-button-edit:hover {
+    background-color: #3fada0;
+}
+
+.table-button-danger {
+    background-color: #E74C3C; /* Rojo suave */
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+.table-button-danger:hover {
+    background-color: #d62c1a;
+}
+button:disabled, button[disabled] { /* Estilo para botones deshabilitados */
+    background-color: #bdc3c7 !important; /* Gris claro */
+    color: #7f8c8d !important;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* Tables */
+table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: separate; /* Permite border-radius en celdas si se desea */
+    border-spacing: 0;
+    border-radius: 8px; /* Redondear la tabla entera */
+    overflow: hidden; /* Para que el border-radius funcione con el fondo de th */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+}
+
+table th, table td {
+    border-bottom: 1px solid #dde1e6; /* Solo borde inferior para un look más limpio */
+    padding: 14px; /* Padding aumentado */
+    text-align: left;
+}
+table td {
+    background-color: #fff; /* Fondo blanco para celdas */
+}
+
+table th {
+    background-color: #e8f0fe; /* Azul muy pálido para encabezados de tabla */
+    font-weight: 600;
+    color: #34495e; /* Gris azulado */
+    text-transform: uppercase; /* Mayúsculas para encabezados */
+    font-size: 0.85em; /* Ligeramente más pequeño */
+    letter-spacing: 0.5px;
+}
+
+table tr:last-child td {
+    border-bottom: none; /* Sin borde en la última fila */
+}
+
+table tr:hover td { /* Efecto hover sobre las celdas de la fila */
+    background-color: #f0f6ff; /* Un azul aún más pálido */
+}
+
+/* Messages */
+.message {
+    margin-top: 20px;
+    padding: 15px 20px; /* Padding ajustado */
+    border-radius: 6px;
+    border: 1px solid transparent;
+    text-align: center;
+    font-size: 0.95em;
+}
+.message.success {
+    background-color: #d1f2eb; /* Verde muy claro (turquesa pálido) */
+    color: #0e6150; /* Verde oscuro para texto */
+    border-color: #b8e9de;
+}
+.message.error {
+    background-color: #fde2e4; /* Rojo muy claro */
+    color: #8a1823; /* Rojo oscuro para texto */
+    border-color: #f9c1c5;
+}
+
+/* Separators and Sections */
+hr {
+    margin: 45px 0;
+    border: 0;
+    border-top: 1px solid #dde1e6; /* Borde gris claro */
+}
+
+section {
+    margin-bottom: 40px;
+    padding: 25px; /* Padding incrementado */
+    background-color: #ffffff; /* Fondo blanco para secciones dentro del contenedor principal */
+    border-radius: 8px;
+    border: 1px solid #e9ecef; /* Borde muy sutil */
+}
+
+/* Form layouts for better alignment */
+#employeeForm div, #accessForm div { /* No aplicar a los contenedores de reportes */
+    display: flex;
+    flex-direction: column;
+}
+
+/* For forms with multiple items in a row (like reports) */
+#reportByDateForm, #reportByEmployeeForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre elementos del formulario de reporte */
+    align-items: flex-end;
+}
+
+#reportByDateForm label, #reportByEmployeeForm label {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+#reportByDateForm input, #reportByEmployeeForm input {
+    margin-top: 0;
+    width: auto;
+    flex-basis: 200px; /* Base para los inputs de fecha/texto */
+    flex-grow: 1;
+}
+#reportByDateForm button, #reportByEmployeeForm button {
+    flex-shrink: 0;
+    margin-top: 0; /* Alinear con los inputs */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+        margin: 15px auto;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+    }
+    header button#logoutButton {
+        position: static;
+        display: block;
+        width: calc(100% - 40px);
+        margin: 20px auto 0;
+        text-align: center;
+        float: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="datetime-local"] {
+        /* Ya son 100% por defecto, ajuste de padding en base */
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 12px;
+        margin-right: 0; /* Sin margen derecho en móvil */
+    }
+    button:last-child {
+        margin-bottom: 0;
+    }
+
+    #reportByDateForm, #reportByEmployeeForm {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    #reportByDateForm input, #reportByEmployeeForm input,
+    #reportByDateForm button, #reportByEmployeeForm button {
+        width: 100%;
+        box-sizing: border-box;
+        flex-basis: auto; /* Reset flex-basis */
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    table tr {
+        border: 1px solid #dde1e6;
+        margin-bottom: 10px; /* Espacio entre "tarjetas" de tabla */
+        border-radius: 6px; /* Redondear cada "tarjeta" */
+        background-color: #fff; /* Asegurar fondo blanco para cada item */
+    }
+    table td {
+        border: none;
+        border-bottom: 1px dotted #e8f0fe; /* Punteado sutil entre datos del item */
+        position: relative;
+        padding-left: 45%; /* Más espacio para la etiqueta */
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-align: left;
+        display: flex; /* Para alinear mejor contenido y botón */
+        justify-content: space-between;
+        align-items: center;
+    }
+    table td:last-child {
+        border-bottom: none;
+    }
+    table td:before {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 15px; /* Más padding izquierdo para la etiqueta */
+        width: auto; /* No fijar ancho, que se ajuste */
+        max-width: 40%; /* Máximo para que no solape */
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: #4A90E2; /* Color primario para etiquetas */
+    }
+
+    table td:nth-of-type(1):before { content: "Doc:"; }
+    table td:nth-of-type(2):before { content: "Nombre:"; }
+    table td:nth-of-type(3):before { content: "Apellido:"; }
+    table td:nth-of-type(4):before { content: "Email:"; }
+    table td:nth-of-type(5):before { content: "Teléfono:"; }
+    table td:nth-of-type(6):before { content: "Estado:"; }
+    table td:nth-of-type(7):before { content: "Acciones:"; }
+
+    /* En móvil, los botones de acción en la tabla deben ser más manejables */
+    table td:nth-of-type(7) button {
+        width: auto; /* No full width para botones en la tabla */
+        padding: 6px 10px;
+        font-size: 0.8em;
+        margin-left: 5px; /* Espacio entre botones de acción */
+        margin-bottom: 0;
+    }
+     table td:nth-of-type(7) {
+        padding-left: 15px; /* Reset padding for action cell if needed */
+        justify-content: flex-start; /* Align buttons to the start in action cell */
+    }
+    table td:nth-of-type(7)::before {
+        display: none; /* Ocultar la etiqueta "Acciones:" si se prefiere */
+    }
+
+}

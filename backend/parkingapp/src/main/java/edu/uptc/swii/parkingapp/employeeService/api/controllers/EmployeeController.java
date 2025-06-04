@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/employee")
-@CrossOrigin(origins = "http://localhost:8082", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST,
+@CrossOrigin(origins = "http://127.0.0.1:5500", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST,
         RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.PATCH })
 public class EmployeeController {
 
