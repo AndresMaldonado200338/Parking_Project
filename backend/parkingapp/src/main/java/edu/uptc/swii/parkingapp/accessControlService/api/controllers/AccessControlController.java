@@ -1,9 +1,17 @@
 package edu.uptc.swii.parkingapp.accessControlService.api.controllers;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-import edu.uptc.swii.parkingapp.accessControlService.application.handlers.AccessControlQueryHandler;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import edu.uptc.swii.parkingapp.accessControlService.api.dtos.AccessRequestDTO;
 import edu.uptc.swii.parkingapp.accessControlService.api.dtos.AccessResponseDTO;
 import edu.uptc.swii.parkingapp.accessControlService.api.dtos.ReportByDateDTO;
@@ -11,14 +19,17 @@ import edu.uptc.swii.parkingapp.accessControlService.api.dtos.ReportByEmployeeDT
 import edu.uptc.swii.parkingapp.accessControlService.api.mappers.AccessControlMapper;
 import edu.uptc.swii.parkingapp.accessControlService.application.commands.UserCheckInCommand;
 import edu.uptc.swii.parkingapp.accessControlService.application.commands.UserCheckOutCommand;
+import edu.uptc.swii.parkingapp.accessControlService.application.handlers.AccessControlCommandHandler;
+import edu.uptc.swii.parkingapp.accessControlService.application.handlers.AccessControlQueryHandler;
 import edu.uptc.swii.parkingapp.accessControlService.application.queries.AllEmployeesByDateQuery;
 import edu.uptc.swii.parkingapp.accessControlService.application.queries.EmployeeByDatesQuery;
-import edu.uptc.swii.parkingapp.accessControlService.application.handlers.AccessControlCommandHandler;
 import jakarta.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/access")
+@CrossOrigin(origins = "http://localhost:8082", 
+             allowedHeaders = "*", 
+             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class AccessControlController {
     
     private final AccessControlCommandHandler commandHandler;

@@ -21,47 +21,62 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import NavBar from '../components/shared/NavBar.vue'
-import SideMenu from '../components/shared/SideMenu.vue'
-import { employeeApi, accessApi } from '../services/api'
-import { toast } from 'vue-toastification'
+import { ref, onMounted } from 'vue';
+import NavBar from '../components/shared/NavBar.vue'; //
+import SideMenu from '../components/shared/SideMenu.vue'; //
+import { employeeApi, accessApi } from '../services/api'; //
+import { useToast } from 'vue-toastification'; // <--- IMPORTA useToast
 
 export default {
-  components: {
-    NavBar,
-    SideMenu
+  components: { //
+    NavBar, //
+    SideMenu //
   },
-  setup() {
-    const employeeCount = ref(0)
-    const todayRecords = ref(0)
+  setup() { //
+    const employeeCount = ref(0); //
+    const todayRecords = ref(0); //
+    const toast = useToast(); // <--- OBTÉN LA INSTANCIA DE TOAST AQUÍ
 
-    const fetchData = async () => {
-      try {
+    const fetchData = async () => { //
+      try { //
         // Obtener total de empleados
-        const employeesResponse = await employeeApi.get('/findallemployees')
-        employeeCount.value = employeesResponse.data.length
+        const employeesResponse = await employeeApi.get('/findallemployees'); //
+        employeeCount.value = employeesResponse.data.length; //
 
         // Obtener registros de hoy
-        const today = new Date().toISOString().split('T')[0]
-        const accessResponse = await accessApi.get(`/allemployeesbydate?date=${today}`)
-        todayRecords.value = accessResponse.data.length
-      } catch (error) {
-        toast.error('Error al cargar datos del dashboard')
-        console.error('Error:', error)
+        const today = new Date().toISOString().split('T')[0]; //
+        const accessResponse = await accessApi.get(`/allemployeesbydate?date=${today}`); //
+        todayRecords.value = accessResponse.data.length; //
+      } catch (error) { //
+        let errorMessage = 'Error al cargar datos del dashboard';
+        if (error.code === 'ERR_CONNECTION_REFUSED') {
+            errorMessage = 'No se pudo conectar al servidor de parking (8080). ¿Está corriendo?';
+        } else if (error.response) {
+            errorMessage = `Error del servidor: ${error.response.data.message || error.response.status}`;
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        if (toast && typeof toast.error === 'function') { //
+            toast.error(errorMessage);
+        } else {
+            console.error("Toast no disponible. Error original:", errorMessage, error);
+        }
+        console.error('Error en fetchData (HomeView.vue):', error); //
       }
-    }
+    };
 
-    onMounted(() => {
-      fetchData()
-    })
+    onMounted(() => { //
+      fetchData(); //
+    });
 
-    return { employeeCount, todayRecords }
+    return { employeeCount, todayRecords }; //
   }
-}
+};
 </script>
 
 <style scoped>
+/* Tus estilos existentes */
 .home-view {
   display: flex;
   flex-direction: column;

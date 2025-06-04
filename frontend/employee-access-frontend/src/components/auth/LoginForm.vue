@@ -1,58 +1,51 @@
 <template>
-  <div class="login-form">
-    <h2>Iniciar Sesión</h2>
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="userID">ID de Usuario</label>
-        <input
-          type="text"
-          id="userID"
-          v-model="userID"
-          placeholder="Ingrese su ID"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          placeholder="Ingrese su contraseña"
-          required
-        />
-      </div>
-      <button type="submit" class="btn-login">Ingresar</button>
-    </form>
-  </div>
+  <form @submit.prevent="handleLogin">
+    <div>
+      <label for="userID">Usuario (ID):</label>
+      <input type="text" v-model="userID" id="userID" required />
+    </div>
+    <div>
+      <label for="password">Contraseña:</label>
+      <input type="password" v-model="password" id="password" required />
+    </div>
+    <button type="submit">Iniciar Sesión</button>
+  </form>
 </template>
 
-<script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { authService } from '../../services/auth'
-import { useAuthStore } from '../../services/storage'
-import { toast } from 'vue-toastification'
+<script setup>
+import { ref } from 'vue';
+import { authService } from '@/services/auth'; // Ajusta la ruta si es diferente
+import { useAuthStore } from '@/services/storage'; // Ajusta la ruta si es diferente
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification'; // ¡Importante!
 
-export default {
-  setup() {
-    const router = useRouter()
-    const authStore = useAuthStore()
-    const userID = ref('')
-    const password = ref('')
+const userID = ref('');
+const password = ref('');
 
-    const handleLogin = async () => {
-      const result = await authService.login(userID.value, password.value)
-      if (result && result.token) {
-        authStore.login(result.token, userID.value)
-        toast.success('Bienvenido')
-        router.push('/home')
-      }
-    }
+const toast = useToast(); // Obtén la instancia de toast
+const router = useRouter();
+const authStore = useAuthStore(); // Obtén la instancia del store
 
-    return { userID, password, handleLogin }
+const handleLogin = async () => {
+  if (!userID.value || !password.value) {
+    toast.error('Por favor, ingrese usuario y contraseña.');
+    return;
   }
-}
+
+  const result = await authService.login(userID.value, password.value);
+
+  // Verifica que result no sea undefined y tenga la propiedad success
+  if (result && result.success) {
+    // Guarda el token y el userID en el store
+    // Asegúrate que tu backend envía 'userID' en response.data si lo necesitas
+    authStore.login(result.data.token, result.data.userID || userID.value); 
+    toast.success(result.message || '¡Inicio de sesión exitoso!');
+    router.push('/home'); // O la ruta a la que quieras redirigir
+  } else {
+    // Muestra el mensaje de error que viene del servicio
+    toast.error(result ? result.message : 'Error desconocido al iniciar sesión.');
+  }
+};
 </script>
 
 <style scoped>
