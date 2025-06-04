@@ -1,4 +1,13 @@
--- GestionEmpleadosDB
+-- LoginDB
+CREATE DATABASE IF NOT EXISTS LoginDB;
+USE LoginDB;
+
+CREATE TABLE Login(
+	id SERIAL AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    userID BIGINT NOT NULL,
+    password VARCHAR(20) NOT NULL    
+);
+
 CREATE DATABASE IF NOT EXISTS GestionEmpleadosDB;
 
 USE GestionEmpleadosDB;

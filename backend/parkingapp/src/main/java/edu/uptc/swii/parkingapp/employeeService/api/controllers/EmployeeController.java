@@ -26,21 +26,19 @@ import edu.uptc.swii.parkingapp.employeeService.application.handlers.EmployeeQue
 import edu.uptc.swii.parkingapp.employeeService.application.queries.FindAllEmployeesQuery;
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/employee")
-@CrossOrigin(origins = "http://localhost:8082", 
-             allowedHeaders = "*", 
-             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://localhost:8082", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST,
+        RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.PATCH })
 public class EmployeeController {
-    
+
     private final EmployeeCommandHandler commandHandler;
     private final EmployeeQueryHandler queryHandler;
     private final EmployeeMapper mapper;
 
-    public EmployeeController(EmployeeCommandHandler commandHandler, 
-                           EmployeeQueryHandler queryHandler,
-                           EmployeeMapper mapper) {
+    public EmployeeController(EmployeeCommandHandler commandHandler,
+            EmployeeQueryHandler queryHandler,
+            EmployeeMapper mapper) {
         this.commandHandler = commandHandler;
         this.queryHandler = queryHandler;
         this.mapper = mapper;
@@ -54,14 +52,14 @@ public class EmployeeController {
         return ResponseEntity.ok(response);
     }
 
-@PutMapping("/updateemployee/{document}")
-public ResponseEntity<EmployeeResponseDTO> updateEmployee(
-        @PathVariable String document,
-        @Valid @RequestBody EmployeeRequestDTO request) {
-    UpdateEmployeeCommand command = mapper.toUpdateCommand(document, request);
-    EmployeeResponseDTO response = commandHandler.handleUpdateEmployee(command);
-    return ResponseEntity.ok(response);
-}
+    @PutMapping("/updateemployee/{document}")
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(
+            @PathVariable String document,
+            @Valid @RequestBody EmployeeRequestDTO request) {
+        UpdateEmployeeCommand command = mapper.toUpdateCommand(document, request);
+        EmployeeResponseDTO response = commandHandler.handleUpdateEmployee(command);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/findallemployees")
     public ResponseEntity<List<EmployeeResponseDTO>> findAllEmployees() {
