@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking System Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="dropdown-select">
+            <select id="apiDocsSelect">
+                <option value="">Documentación APIs</option>
+                <option value="http://localhost:8080/swagger-ui/index.html#/">Employees & Access API docs</option>
+                <option value="http://localhost:8081/swagger-ui/index.html#/">Login API docs</option>
+            </select>
+        </div>
+        <h1>Parking Management System</h1>
+        <button id="logoutButton">Logout</button>
+    </header>
+
+    <div class="container">
+        <section id="employeeManagement">
+            <h2>Employee Management</h2>
+            <div id="employeeFormContainer">
+                <h3>Create/Update Employee</h3>
+                <form id="employeeForm">
+                    <input type="hidden" id="employeeDocumentHidden">
+                    <div>
+                        <label for="document">Document:</label>
+                        <input type="text" id="document" name="document" required minlength="5" maxlength="20">
+                    </div>
+                    <div>
+                        <label for="firstname">First Name:</label>
+                        <input type="text" id="firstname" name="firstname" required maxlength="50">
+                    </div>
+                    <div>
+                        <label for="lastname">Last Name:</label>
+                        <input type="text" id="lastname" name="lastname" required maxlength="50">
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" required pattern="^\+?[0-9]{10,15}$">
+                    </div>
+                    <button type="submit" id="saveEmployeeButton">Save Employee</button>
+                    <button type="button" id="clearEmployeeFormButton">Clear Form</button>
+                </form>
+                <div id="employeeMessage" class="message"></div>
+            </div>
+
+            <h3>All Employees</h3>
+            <button id="loadEmployeesButton">Load All Employees</button>
+            <table id="employeesTable">
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+
+        <hr>
+
+        <section id="accessControl">
+            <h2>Access Control</h2>
+            <form id="accessForm">
+                <div>
+                    <label for="accessEmployeeId">Employee ID:</label>
+                    <input type="text" id="accessEmployeeId" name="employeeId" required minlength="5" maxlength="20">
+                </div>
+                <div>
+                    <label for="accessDateTime">Date & Time (Optional):</label>
+                    <input type="datetime-local" id="accessDateTime" name="accessDateTime">
+                </div>
+                <button type="button" id="checkInButton">Check-In</button>
+                <button type="button" id="checkOutButton">Check-Out</button>
+            </form>
+            <div id="accessMessage" class="message"></div>
+        </section>
+
+        <hr>
+
+        <section id="reports">
+            <h2>Reports</h2>
+            <div>
+                <h3>Employees by Date</h3>
+                <form id="reportByDateForm">
+                    <label for="reportDate">Date:</label>
+                    <input type="date" id="reportDate" name="date" required>
+                    <button type="submit">Generate Report</button>
+                </form>
+                <div id="reportByDateResult"></div>
+            </div>
+            <br>
+            <div>
+                <h3>Employee Access by Date Range</h3>
+                <form id="reportByEmployeeForm">
+                    <div>
+                        <label for="reportEmployeeId">Employee ID:</label>
+                        <input type="text" id="reportEmployeeId" name="employeeId" required>
+                    </div>
+                    <div>
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    <div>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                    <div>
+                        <button type="submit">Generate Report</button>
+                    </div>
+                </form>
+                <div id="reportByEmployeeResult"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/employee.js"></script>
+    <script src="js/accessControl.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('apiDocsSelect');
+
+            select.addEventListener('change', () => {
+                const url = select.value;
+                if (url) {
+                    window.open(url, '_blank'); // abre en nueva pestaña
+                    select.selectedIndex = 0;   // vuelve a la opción inicial
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking System - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div>
+                <label for="userID">User ID:</label>
+                <input type="number" id="userID" name="userID" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" minlength="8" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginMessage" class="message"></div>
+         <p>Note: User registration is not available through the frontend.</p>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+</html>

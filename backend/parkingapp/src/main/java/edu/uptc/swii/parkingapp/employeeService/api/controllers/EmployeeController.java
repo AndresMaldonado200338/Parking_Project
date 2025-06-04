@@ -31,9 +31,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/employee")
 @Tag(name = "Employee Service", description = "Microservicio para la gestión de empleados")
-@CrossOrigin(origins = "http://localhost:8082", 
+@CrossOrigin(origins = "http://127.0.0.1:5500", 
              allowedHeaders = "*", 
-             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.PATCH})
 public class EmployeeController {
 
     private final EmployeeCommandHandler commandHandler;
