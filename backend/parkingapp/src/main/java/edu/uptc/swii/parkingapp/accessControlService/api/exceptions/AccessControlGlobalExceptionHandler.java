@@ -17,7 +17,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import edu.uptc.swii.parkingapp.accessControlService.api.dtos.ErrorResponseDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 
+@Hidden
 @ControllerAdvice
 public class AccessControlGlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
